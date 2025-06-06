@@ -1,0 +1,12 @@
+{
+  "users": [
+    {
+      "id": "56346",
+      "name": "Mayur",
+      "email": "mayur123@gmail.com",
+      "role": "admin",
+      "password": "password"
+    }
+  ],
+  "tasks": []
+}
