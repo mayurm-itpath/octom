@@ -1,12 +1,31 @@
 {
   "users": [
     {
-      "id": "56346",
+      "id": "1748929715772",
+      "name": "Mayur Makwana",
+      "email": "mayurm@gmail.com",
+      "role": "admin",
+      "password": "aaaaaa",
+      "confirmPassword": "aaaaaa"
+    },
+    {
+      "id": "1748933930405",
       "name": "Mayur",
       "email": "mayur123@gmail.com",
-      "role": "admin",
-      "password": "password"
+      "role": "user",
+      "password": "aaaaaa",
+      "confirmPassword": "aaaaaa"
     }
   ],
-  "tasks": []
+  "tasks": [
+    {
+      "id": "5949493d-c659-49c0-ac2a-b3561548d96f",
+      "title": "rasde",
+      "description": "rserfrr",
+      "dueDate": "2025-06-12",
+      "status": "pending",
+      "userName": "Mayur",
+      "userEmail": "mayur123@gmail.com"
+    }
+  ]
 }
