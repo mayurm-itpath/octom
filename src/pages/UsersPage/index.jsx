@@ -1,10 +1,9 @@
-import React from "react";
-import UsersList from "../../components/UsersList";
+import Users from "../../containers/Users";
 
 const UsersPage = () => {
   return (
     <>
-      <UsersList />
+      <Users />
     </>
   );
 };

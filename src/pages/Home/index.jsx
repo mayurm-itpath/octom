@@ -1,9 +1,9 @@
-import TasksList from "../../components/TasksList";
+import Tasks from "../../containers/Tasks";
 
 const HomePage = () => {
   return (
     <>
-      <TasksList />
+      <Tasks />
     </>
   );
 };

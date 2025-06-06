@@ -15,14 +15,58 @@
       "role": "user",
       "password": "aaaaaa",
       "confirmPassword": "aaaaaa"
+    },
+    {
+      "id": "1749187365930",
+      "name": "Raj",
+      "email": "raj@gmail.com",
+      "role": "user",
+      "password": "aaaaaa",
+      "confirmPassword": "aaaaaa"
     }
   ],
   "tasks": [
     {
       "id": "5949493d-c659-49c0-ac2a-b3561548d96f",
-      "title": "rasde",
+      "title": "b",
       "description": "rserfrr",
       "dueDate": "2025-06-12",
+      "status": "approved",
+      "userName": "Mayur",
+      "userEmail": "mayur123@gmail.com"
+    },
+    {
+      "id": "42ea5264-22cd-4495-b507-f17e6bcd391c",
+      "title": "sfds",
+      "description": "rrtr",
+      "dueDate": "2025-06-12",
+      "status": "approved",
+      "userName": "Raj",
+      "userEmail": "raj@gmail.com"
+    },
+    {
+      "id": "e0c7d28b-53fc-4d35-ac92-b4e08ae57ea5",
+      "title": "ryh",
+      "description": "eyddyt",
+      "dueDate": "2025-06-19",
+      "status": "approved",
+      "userName": "Mayur",
+      "userEmail": "mayur123@gmail.com"
+    },
+    {
+      "id": "e35c9bb5-ca92-4ffa-bfce-3466e6839cae",
+      "title": "ruy7",
+      "description": "shtyt6u",
+      "dueDate": "2025-06-09",
+      "status": "pending",
+      "userName": "Mayur",
+      "userEmail": "mayur123@gmail.com"
+    },
+    {
+      "id": "6397ead0-2d3b-4f75-80ea-39f5b3e0e0c5",
+      "title": "d7jhk",
+      "description": "fjkfebbb",
+      "dueDate": "2025-06-25",
       "status": "pending",
       "userName": "Mayur",
       "userEmail": "mayur123@gmail.com"

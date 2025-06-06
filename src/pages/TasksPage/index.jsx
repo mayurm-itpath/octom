@@ -1,10 +1,9 @@
-import React from "react";
-import TasksList from "../../components/TasksList";
+import Tasks from "../../containers/Tasks";
 
 const TasksPage = () => {
   return (
     <>
-      <TasksList />
+      <Tasks />
     </>
   );
 };
