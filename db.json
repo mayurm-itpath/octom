@@ -31,7 +31,7 @@
       "title": "b",
       "description": "rserfrr",
       "dueDate": "2025-06-12",
-      "status": "approved",
+      "status": "pending",
       "userName": "Mayur",
       "userEmail": "mayur123@gmail.com"
     },
@@ -40,7 +40,7 @@
       "title": "sfds",
       "description": "rrtr",
       "dueDate": "2025-06-12",
-      "status": "approved",
+      "status": "in progress",
       "userName": "Raj",
       "userEmail": "raj@gmail.com"
     },
@@ -49,7 +49,7 @@
       "title": "ryh",
       "description": "eyddyt",
       "dueDate": "2025-06-19",
-      "status": "approved",
+      "status": "in progress",
       "userName": "Mayur",
       "userEmail": "mayur123@gmail.com"
     },
@@ -58,7 +58,7 @@
       "title": "ruy7",
       "description": "shtyt6u",
       "dueDate": "2025-06-09",
-      "status": "pending",
+      "status": "completed",
       "userName": "Mayur",
       "userEmail": "mayur123@gmail.com"
     },
@@ -67,7 +67,7 @@
       "title": "d7jhk",
       "description": "fjkfebbb",
       "dueDate": "2025-06-25",
-      "status": "pending",
+      "status": "completed",
       "userName": "Mayur",
       "userEmail": "mayur123@gmail.com"
     }

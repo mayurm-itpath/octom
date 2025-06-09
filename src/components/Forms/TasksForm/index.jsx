@@ -38,16 +38,26 @@ const TasksForm = ({
 
   const onSubmit = async (data) => {
     if (isUpdate) {
-      await api.TASKS.update({ id: data.id, data });
-      setIsUpdate(false);
+      try {
+        await api.TASKS.update({ id: data.id, data });
+        setIsUpdate(false);
+      } catch (error) {
+        window.alert('Error while update task');
+        console.log(error);
+      }
     } else {
-      const formData = {
-        ...data,
-        id: uuid(),
-        userName: userInfo.name,
-        userEmail: userInfo.email,
-      };
-      await api.TASKS.post({ data: formData });
+      try {
+        const formData = {
+          ...data,
+          id: uuid(),
+          userName: userInfo.name,
+          userEmail: userInfo.email,
+        };
+        await api.TASKS.post({ data: formData });
+      } catch (error) {
+        window.alert('Error while add task');
+        console.log(error);
+      }
     }
     reset(initialFormData());
     dispatch(fetchTasks({}));

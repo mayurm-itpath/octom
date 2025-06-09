@@ -8,6 +8,7 @@ import TasksTable from "../../components/Tables/TasksTable";
 import SearchInput from "../../shared/Inputs/SearchInput";
 import { api } from "../../api/client";
 import _ from "lodash";
+import useDebounce from "../../hooks/useDebounce";
 
 const Tasks = () => {
   const tasks = useSelector((state) => state.tasks.tasks);
@@ -17,11 +18,25 @@ const Tasks = () => {
   const { open, handleOpen, handleClose } = useModal();
   const [tasksList, setTasksList] = useState([]);
   const [searchTasks, setSearchTasks] = useState("");
+  const [queryData, setQueryData] = useState({
+    filterArray: [],
+    filterQuery: "",
+    sortTask: "",
+  });
   const dispatch = useDispatch();
+  const debouncedSearch = useDebounce(searchTasks, 500);
 
   useEffect(() => {
     dispatch(fetchTasks({}));
   }, [dispatch]);
+
+  useEffect(() => {
+    (async () => {
+      const res1 = await api.TASKS.searchByName({data: debouncedSearch});
+      const res2 = await api.TASKS.searchByTitle({data: debouncedSearch});
+      setTasksList(_.uniqBy([...res1, ...res2], "id"));
+    })();
+  }, [debouncedSearch]);
 
   useEffect(() => {
     if (userInfo.role === "user") {
@@ -33,6 +48,13 @@ const Tasks = () => {
     }
   }, [userInfo, tasks]);
 
+  useEffect(() => {
+    (async () => {
+      const res = await api.TASKS.sortAndFilter({ data: queryData });
+      setTasksList(res);
+    })();
+  }, [queryData]);
+
   if (tasks.isLoading) {
     return <>Loading...</>;
   }
@@ -43,19 +65,24 @@ const Tasks = () => {
     handleOpen();
   };
 
-  const handleSearch = async (data) => {
-    const res1 = await api.TASKS.searchByTitle({ data });
-    const res2 = await api.TASKS.searchByName({ data });
-    setTasksList(_.uniqBy([...res1, ...res2], "id"));
-  };
-
   const handleChangeSearch = (e) => {
     setSearchTasks(e.target.value);
   };
 
   const handleSort = async (e) => {
-    const res = await api.TASKS.sortByDate({ data: e.target.value });
-    setTasksList(res);
+    setQueryData({ ...queryData, sortTask: e.target.value });
+  };
+
+  const handleFilter = async (e) => {
+    const { checked, value } = e.target;
+    let tempArr;
+    if (checked) {
+      tempArr = [...queryData.filterArray, value];
+    } else {
+      tempArr = queryData.filterArray.filter((item) => item !== value);
+    }
+    const query = tempArr.map((item) => `status=${item}`).join("&");
+    setQueryData({ ...queryData, filterArray: tempArr, filterQuery: query });
   };
 
   return (
@@ -71,10 +98,6 @@ const Tasks = () => {
                   value={searchTasks}
                   onChange={handleChangeSearch}
                 />
-                <BlueButton
-                  title={"Search"}
-                  onClick={() => handleSearch(searchTasks)}
-                />
               </div>
               <br />
 
@@ -86,6 +109,36 @@ const Tasks = () => {
                   <option value="">Sort By</option>
                   <option value="dueDate">Due Date</option>
                 </select>
+                <br />
+                <br />
+
+                <div className="flex gap-5">
+                  <label>Filter By Starus: </label>
+                  <div>
+                    <input
+                      type="checkbox"
+                      value={"completed"}
+                      onChange={handleFilter}
+                    />{" "}
+                    <label>completed</label>
+                  </div>
+                  <div>
+                    <input
+                      type="checkbox"
+                      value={"pending"}
+                      onChange={handleFilter}
+                    />{" "}
+                    <label>pending</label>
+                  </div>
+                  <div>
+                    <input
+                      type="checkbox"
+                      value={"in progress"}
+                      onChange={handleFilter}
+                    />{" "}
+                    <label>in progress</label>
+                  </div>
+                </div>
               </div>
             </>
           ) : (

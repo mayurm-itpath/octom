@@ -16,7 +16,6 @@ export const api = {
         delete: ({ id, data, ...config }) => client({ method: METHODS.DELETE, url: `/tasks/${id}`, data, ...config }),
         searchByName: ({ data, ...config }) => client({ method: METHODS.GET, url: `/tasks?userName_like=${data}`, data, ...config }),
         searchByTitle: ({ data, ...config }) => client({ method: METHODS.GET, url: `/tasks?title_like=${data}`, data, ...config }),
-        sortByDate: ({ data, ...config }) => client({ method: METHODS.GET, url: `/tasks?_sort=${data}&_order=asc`, data, ...config }),
-        filterByStatus: ({ data, ...config }) => client({ method: METHODS.GET, url: `/tasks?${data}`, data, ...config })
+        sortAndFilter: ({ data, ...config }) => client({ method: METHODS.GET, url: `/tasks?_sort=${data.sortTask}&${data.filterQuery}`, data, ...config }),
     }
 }

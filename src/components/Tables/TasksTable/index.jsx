@@ -23,25 +23,17 @@ const TasksTable = ({
     }
   };
 
-  const handleApprove = async (item) => {
+  const handleStatus = async (item, value) => {
     await api.TASKS.update({
       id: item.id,
-      data: { ...item, status: "approved" },
+      data: { ...item, status: value },
     });
-    dispatch(fetchTasks({}));
-  };
-
-  const handleReject = async (item) => {
-    await api.TASKS.update({
-      id: item.id,
-      data: { ...item, status: "reject" },
-    });
-    dispatch(fetchTasks({}));
-  };
+      dispatch(fetchTasks({}));
+  }
 
   return (
     <>
-      <div className="flex py-[30px]">
+      <div className="flex py-[30px] overflow-auto">
         {tasksList.length !== 0 ? (
           <table className="border border-black border-collapse">
             <thead>
@@ -55,8 +47,9 @@ const TasksTable = ({
 
                 {userInfo.role === "admin" ? (
                   <>
-                    <th className="border border-black py-2 px-3">Approve</th>
-                    <th className="border border-black py-2 px-3">Reject</th>
+                    <th className="border border-black py-2 px-3">Pending</th>
+                    <th className="border border-black py-2 px-3">In Progress</th>
+                    <th className="border border-black py-2 px-3">Completed</th>
                   </>
                 ) : (
                   <>
@@ -96,14 +89,20 @@ const TasksTable = ({
                     <>
                       <td className="border border-black py-2 px-3">
                         <BlueButton
-                          title={"Approve"}
-                          onClick={() => handleApprove(item)}
+                          title={"Pending"}
+                          onClick={() => handleStatus(item, 'pending')}
                         />
                       </td>
                       <td className="border border-black py-2 px-3">
                         <BlueButton
-                          title={"Reject"}
-                          onClick={() => handleReject(item)}
+                          title={"In Progress"}
+                          onClick={() => handleStatus(item, 'in progress')}
+                        />
+                      </td>
+                      <td className="border border-black py-2 px-3">
+                        <BlueButton
+                          title={"Completed"}
+                          onClick={() => handleStatus(item, 'completed')}
                         />
                       </td>
                     </>
