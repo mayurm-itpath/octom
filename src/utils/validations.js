@@ -19,5 +19,10 @@ export const taskValidation = Yup.object().shape({
     dueDate: Yup.string().required('Due Date is required').test('future-date', 'past date is not allowed', (value) => {
         return (new Date(value) > new Date())
     }),
-    status: Yup.string().required('Status is required')
+});
+
+export const forgotPasswordValidation = Yup.object().shape({
+    email: Yup.string().email('Invalid Email Id').required('Email Id is required'),
+    password: Yup.string().required('Password is required').min(6, 'Minimum 6 characters required'),
+    confirmPassword: Yup.string().required('Confirm Password is required').oneOf([Yup.ref('password')], "Password dosn't match")
 });

@@ -23,18 +23,17 @@
       "role": "user",
       "password": "aaaaaa",
       "confirmPassword": "aaaaaa"
+    },
+    {
+      "id": "1749554889276",
+      "name": "Mayur Makwana",
+      "email": "raj544545@gmail.com",
+      "role": "user",
+      "password": "aaaaaa",
+      "confirmPassword": "aaaaaa"
     }
   ],
   "tasks": [
-    {
-      "id": "5949493d-c659-49c0-ac2a-b3561548d96f",
-      "title": "b",
-      "description": "rserfrr",
-      "dueDate": "2025-06-12",
-      "status": "pending",
-      "userName": "Mayur",
-      "userEmail": "mayur123@gmail.com"
-    },
     {
       "id": "42ea5264-22cd-4495-b507-f17e6bcd391c",
       "title": "sfds",
@@ -49,7 +48,7 @@
       "title": "ryh",
       "description": "eyddyt",
       "dueDate": "2025-06-19",
-      "status": "in progress",
+      "status": "completed",
       "userName": "Mayur",
       "userEmail": "mayur123@gmail.com"
     },
@@ -67,9 +66,45 @@
       "title": "d7jhk",
       "description": "fjkfebbb",
       "dueDate": "2025-06-25",
-      "status": "completed",
+      "status": "in progress",
       "userName": "Mayur",
       "userEmail": "mayur123@gmail.com"
+    },
+    {
+      "id": "ba927161-09d3-40b1-ab82-518e44f87e9a",
+      "title": "tdr",
+      "description": "aaa",
+      "dueDate": "2025-06-17",
+      "status": "in progress",
+      "userName": "Raj",
+      "userEmail": "raj@gmail.com"
+    },
+    {
+      "title": "rft",
+      "description": "sfxrty",
+      "dueDate": "2025-06-18",
+      "status": "pending",
+      "id": "c793fe51-2093-40ae-8e5d-a0eef0cef2ab",
+      "userName": "Mayur",
+      "userEmail": "mayur123@gmail.com"
+    },
+    {
+      "title": "thj",
+      "description": "fjtfg",
+      "dueDate": "2025-06-12",
+      "status": "pending",
+      "id": "f7eae327-f713-4426-b429-6c0d1794608e",
+      "userName": "Mayur",
+      "userEmail": "mayur123@gmail.com"
+    },
+    {
+      "title": "trtrt",
+      "description": "tyttt",
+      "dueDate": "2025-06-18",
+      "status": "pending",
+      "id": "f3b877ec-8f8a-4481-ae7e-489d823e224f",
+      "userName": "Mayur Makwana",
+      "userEmail": "raj544545@gmail.com"
     }
   ]
 }

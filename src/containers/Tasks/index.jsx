@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTasks } from "../../redux/slices/tasks.slice";
+import {
+  fetchTasks,
+  searchTasks as searchTasksFunction,
+} from "../../redux/slices/tasks.slice";
 import BlueButton from "../../shared/Buttons/BlueButton";
 import TasksForm from "../../components/Forms/TasksForm";
 import useModal from "../../hooks/useModal";
@@ -30,13 +33,12 @@ const Tasks = () => {
     dispatch(fetchTasks({}));
   }, [dispatch]);
 
+  // search by name or title
   useEffect(() => {
-    (async () => {
-      const res1 = await api.TASKS.searchByName({data: debouncedSearch});
-      const res2 = await api.TASKS.searchByTitle({data: debouncedSearch});
-      setTasksList(_.uniqBy([...res1, ...res2], "id"));
-    })();
-  }, [debouncedSearch]);
+    if (userInfo.role === "admin") {
+      dispatch(searchTasksFunction(debouncedSearch));
+    }
+  }, [debouncedSearch, userInfo, dispatch]);
 
   useEffect(() => {
     if (userInfo.role === "user") {
@@ -48,16 +50,15 @@ const Tasks = () => {
     }
   }, [userInfo, tasks]);
 
+  // Filter tasks
   useEffect(() => {
-    (async () => {
-      const res = await api.TASKS.sortAndFilter({ data: queryData });
-      setTasksList(res);
-    })();
-  }, [queryData]);
-
-  if (tasks.isLoading) {
-    return <>Loading...</>;
-  }
+    if (userInfo.role === "admin") {
+      (async () => {
+        const res = await api.TASKS.sortAndFilter({ data: queryData });
+        setTasksList(res);
+      })();
+    }
+  }, [queryData, userInfo]);
 
   const handleUpdate = (item) => {
     setIsUpdate(true);

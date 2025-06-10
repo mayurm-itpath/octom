@@ -3,11 +3,7 @@ import { useDispatch } from "react-redux";
 import { api } from "../../../api/client";
 import { fetchTasks } from "../../../redux/slices/tasks.slice";
 
-const TasksTable = ({
-  tasksList,
-  userInfo,
-  handleUpdate,
-}) => {
+const TasksTable = ({ tasksList, userInfo, handleUpdate }) => {
   const dispatch = useDispatch();
 
   const handleDelete = async (id) => {
@@ -28,8 +24,8 @@ const TasksTable = ({
       id: item.id,
       data: { ...item, status: value },
     });
-      dispatch(fetchTasks({}));
-  }
+    dispatch(fetchTasks({}));
+  };
 
   return (
     <>
@@ -41,14 +37,21 @@ const TasksTable = ({
                 <th className="border border-black py-2 px-3">Title</th>
                 <th className="border border-black py-2 px-3">Description</th>
                 <th className="border border-black py-2 px-3">Due Date</th>
-                <th className="border border-black py-2 px-3">Name</th>
-                <th className="border border-black py-2 px-3">Email</th>
+                {userInfo.role === "admin" ? (
+                  <>
+                    <th className="border border-black py-2 px-3">Name</th>
+                    <th className="border border-black py-2 px-3">Email</th>
+                  </>
+                ) : (
+                  <></>
+                )}
                 <th className="border border-black py-2 px-3">Status</th>
 
                 {userInfo.role === "admin" ? (
                   <>
-                    <th className="border border-black py-2 px-3">Pending</th>
-                    <th className="border border-black py-2 px-3">In Progress</th>
+                    <th className="border border-black py-2 px-3">
+                      In Progress
+                    </th>
                     <th className="border border-black py-2 px-3">Completed</th>
                   </>
                 ) : (
@@ -75,12 +78,18 @@ const TasksTable = ({
                       "/" +
                       new Date(item.dueDate).getFullYear()}
                   </td>
-                  <td className="border border-black py-2 px-3">
-                    {item.userName}
-                  </td>
-                  <td className="border border-black py-2 px-3">
-                    {item.userEmail}
-                  </td>
+                  {userInfo.role === "admin" ? (
+                    <>
+                      <td className="border border-black py-2 px-3">
+                        {item.userName}
+                      </td>
+                      <td className="border border-black py-2 px-3">
+                        {item.userEmail}
+                      </td>
+                    </>
+                  ) : (
+                    <></>
+                  )}
                   <td className="border border-black py-2 px-3">
                     {item.status}
                   </td>
@@ -89,20 +98,14 @@ const TasksTable = ({
                     <>
                       <td className="border border-black py-2 px-3">
                         <BlueButton
-                          title={"Pending"}
-                          onClick={() => handleStatus(item, 'pending')}
-                        />
-                      </td>
-                      <td className="border border-black py-2 px-3">
-                        <BlueButton
                           title={"In Progress"}
-                          onClick={() => handleStatus(item, 'in progress')}
+                          onClick={() => handleStatus(item, "in progress")}
                         />
                       </td>
                       <td className="border border-black py-2 px-3">
                         <BlueButton
                           title={"Completed"}
-                          onClick={() => handleStatus(item, 'completed')}
+                          onClick={() => handleStatus(item, "completed")}
                         />
                       </td>
                     </>

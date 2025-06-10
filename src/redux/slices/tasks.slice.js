@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "../../api/client";
 import axios from "axios";
+import _ from "lodash";
 
 const initialState = {
     tasks: {
@@ -21,6 +22,19 @@ export const fetchTasks = createAsyncThunk(
     }
 );
 
+export const searchTasks = createAsyncThunk(
+    'tasks/searchTasks',
+    async (data, { rejectWithValue }) => {
+        try {
+            const res1 = await api.TASKS.searchByName({ data });
+            const res2 = await api.TASKS.searchByTitle({ data });
+            return [...res1, ...res2];
+        } catch (error) {
+            return rejectWithValue(error);
+        }
+    }
+);
+
 const tasksSlice = createSlice({
     name: 'tasks',
     initialState,
@@ -35,7 +49,20 @@ const tasksSlice = createSlice({
                 state.tasks.data = action.payload;
             })
             .addCase(fetchTasks.rejected, (state, action) => {
-                if(axios.isCancel(action.payload)) {
+                if (axios.isCancel(action.payload)) {
+                    return;
+                }
+                state.tasks.isLoading = false;
+            })
+            .addCase(searchTasks.pending, (state) => {
+                state.tasks.isLoading = true;
+            })
+            .addCase(searchTasks.fulfilled, (state, action) => {
+                state.tasks.isLoading = false;
+                state.tasks.data = _.uniqBy(action.payload, 'id');
+            })
+            .addCase(searchTasks.rejected, (state, action) => {
+                if (axios.isCancel(action.payload)) {
                     return;
                 }
                 state.tasks.isLoading = false;

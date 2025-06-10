@@ -52,6 +52,7 @@ const TasksForm = ({
           id: uuid(),
           userName: userInfo.name,
           userEmail: userInfo.email,
+          status: 'pending'
         };
         await api.TASKS.post({ data: formData });
       } catch (error) {
@@ -72,7 +73,7 @@ const TasksForm = ({
   };
 
   useEffect(() => {
-    if (updateData) {
+    if (isUpdate) {
       reset({
         id: updateData.id,
         title: updateData.title,
@@ -85,14 +86,14 @@ const TasksForm = ({
     } else {
       reset(initialFormData());
     }
-  }, [updateData, reset]);
+  }, [updateData, isUpdate, reset]);
 
   return (
     <>
       <div
         className={`${
           openModal ? "flex" : "hidden"
-        } h-[100vh] w-[100vw] absolute top-0 left-0 bg-black bg-opacity-30 justify-center items-center`}
+        } h-[100vh] w-[100vw] fixed top-0 left-0 bg-black bg-opacity-30 justify-center items-center`}
       >
         <div className="p-5 rounded-xl fixed bg-white">
           <h2 className="text-3xl text-center font-bold">
@@ -121,17 +122,6 @@ const TasksForm = ({
               {...register("dueDate")}
               error={errors.dueDate}
             />
-
-            <div>
-              <select
-                className="border border-black p-2 rounded"
-                {...register("status")}
-              >
-                <option value="">Select Status</option>
-                <option value="pending">Pending</option>
-              </select>
-              <div className="text-red">{errors.status?.message}</div>
-            </div>
 
             <BlueButton type="submit" title={"Submit"} />
 
