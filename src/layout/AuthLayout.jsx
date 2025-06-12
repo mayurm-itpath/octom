@@ -2,7 +2,7 @@ import Header from "../components/Header";
 import { Outlet } from "react-router-dom";
 import withAuth from "../hoc/withAuth";
 
-const PublicLayout = () => {
+const AuthLayout = () => {
   return (
     <>
       <Header />
@@ -11,4 +11,4 @@ const PublicLayout = () => {
   );
 };
 
-export default withAuth(PublicLayout);
+export default withAuth(AuthLayout);

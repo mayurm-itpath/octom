@@ -1,9 +1,13 @@
 import BlueButton from "../../../shared/Buttons/BlueButton";
-import { useDispatch } from "react-redux";
-import { api } from "../../../api/client";
-import { fetchTasks } from "../../../redux/slices/tasks.slice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  changeTaskStatus,
+  deleteTask,
+  fetchTasks,
+} from "../../../redux/slices/tasks.slice";
 
-const TasksTable = ({ tasksList, userInfo, handleUpdate }) => {
+const TasksTable = ({ userInfo, handleUpdate }) => {
+  const tasks = useSelector((state) => state.tasks.tasks);
   const dispatch = useDispatch();
 
   const handleDelete = async (id) => {
@@ -11,26 +15,24 @@ const TasksTable = ({ tasksList, userInfo, handleUpdate }) => {
       "Are you sure, you want to delete this task?"
     );
     if (confirm) {
-      const res = await api.TASKS.delete({ id });
-      dispatch(fetchTasks({}));
-      return res;
+      await dispatch(deleteTask(id));
+      await dispatch(fetchTasks({}));
     } else {
       return;
     }
   };
 
   const handleStatus = async (item, value) => {
-    await api.TASKS.update({
-      id: item.id,
-      data: { ...item, status: value },
-    });
-    dispatch(fetchTasks({}));
+    await dispatch(
+      changeTaskStatus({ id: item.id, data: { ...item, status: value } })
+    );
+    await dispatch(fetchTasks({}));
   };
 
   return (
     <>
       <div className="flex py-[30px] overflow-auto">
-        {tasksList.length !== 0 ? (
+        {tasks.data.length !== 0 ? (
           <table className="border border-black border-collapse">
             <thead>
               <tr>
@@ -43,7 +45,10 @@ const TasksTable = ({ tasksList, userInfo, handleUpdate }) => {
                     <th className="border border-black py-2 px-3">Email</th>
                   </>
                 ) : (
-                  <></>
+                  <>
+                    <th className="border border-black py-2 px-3">Name</th>
+                    <th className="border border-black py-2 px-3">Email</th>
+                  </>
                 )}
                 <th className="border border-black py-2 px-3">Status</th>
 
@@ -63,7 +68,7 @@ const TasksTable = ({ tasksList, userInfo, handleUpdate }) => {
               </tr>
             </thead>
             <tbody>
-              {tasksList.map((item) => (
+              {tasks.data.map((item) => (
                 <tr key={item.id}>
                   <td className="border border-black py-2 px-3">
                     {item.title}
@@ -88,7 +93,14 @@ const TasksTable = ({ tasksList, userInfo, handleUpdate }) => {
                       </td>
                     </>
                   ) : (
-                    <></>
+                    <>
+                      <td className="border border-black py-2 px-3">
+                        {item.userName}
+                      </td>
+                      <td className="border border-black py-2 px-3">
+                        {item.userEmail}
+                      </td>
+                    </>
                   )}
                   <td className="border border-black py-2 px-3">
                     {item.status}

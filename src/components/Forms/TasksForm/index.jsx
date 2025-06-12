@@ -4,16 +4,15 @@ import BlueButton from "../../../shared/Buttons/BlueButton";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { taskValidation } from "../../../utils/validations";
-import { api } from "../../../api/client";
 import { v4 as uuid } from "uuid";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTasks } from "../../../redux/slices/tasks.slice";
+import { addTask, fetchTasks, updateTask } from "../../../redux/slices/tasks.slice";
 
 const TasksForm = ({
   isUpdate,
   updateData,
-  setIsUpdate,
+  setUpdateInfo,
   openModal,
   handleCloseModal,
 }) => {
@@ -39,10 +38,10 @@ const TasksForm = ({
   const onSubmit = async (data) => {
     if (isUpdate) {
       try {
-        await api.TASKS.update({ id: data.id, data });
-        setIsUpdate(false);
+        await dispatch(updateTask({ id: data.id, data }));
+        setUpdateInfo((prev) => ({ ...prev, isUpdate: false }));
       } catch (error) {
-        window.alert('Error while update task');
+        window.alert("Error while update task");
         console.log(error);
       }
     } else {
@@ -52,22 +51,22 @@ const TasksForm = ({
           id: uuid(),
           userName: userInfo.name,
           userEmail: userInfo.email,
-          status: 'pending'
+          status: "pending",
         };
-        await api.TASKS.post({ data: formData });
+        await dispatch(addTask(formData));
       } catch (error) {
-        window.alert('Error while add task');
+        window.alert("Error while add task");
         console.log(error);
       }
     }
     reset(initialFormData());
-    dispatch(fetchTasks({}));
+    await dispatch(fetchTasks({}));
     handleCloseModal();
     return;
   };
 
   const closeModal = () => {
-    setIsUpdate(false);
+    setUpdateInfo((prev) => ({ ...prev, isUpdate: false }));
     reset(initialFormData());
     handleCloseModal();
   };

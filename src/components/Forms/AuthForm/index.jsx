@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { api } from "../../../api/client";
 import { useDispatch } from "react-redux";
-import { login } from "../../../redux/slices/users.slice";
+import { loginUser, registerUser } from "../../../redux/slices/users.slice";
 import BlueButton from "../../../shared/Buttons/BlueButton";
 import { Link, useNavigate } from "react-router-dom";
 import { URLS } from "../../../constants/urls";
@@ -43,13 +43,15 @@ const AuthForm = ({ isLogin }) => {
   const onSubmit = async (data) => {
     if (isLogin) {
       try {
-        const res = await api.USERS.getUserByEmail({ data });
-        if (res[0].password === data.password) {
-          dispatch(login(res[0]));
-          navigate(URLS.INITIAL);
-        } else {
-          window.alert("Invalid Login Info");
-        }
+        // const res = await api.USERS.getUserByEmail({ data });
+        // if (res[0].password === data.password) {
+        //   dispatch(login(res[0]));
+        //   navigate(URLS.INITIAL);
+        // } else {
+        //   window.alert("Invalid Login Info");
+        // }
+        await dispatch(loginUser(data));
+        navigate(URLS.INITIAL);
       } catch (error) {
         window.alert("Error while login");
         console.log(error);
@@ -60,8 +62,7 @@ const AuthForm = ({ isLogin }) => {
         if (res[0]?.email === data?.email) {
           window.alert("Email already exist");
         } else {
-          api.USERS.post({ data });
-          dispatch(login(data));
+          await dispatch(registerUser(data));
           navigate(URLS.INITIAL);
         }
       } catch (error) {
@@ -136,7 +137,9 @@ const AuthForm = ({ isLogin }) => {
               />
             )}
 
-            <Link to={URLS.FORGOTPASSWORD} className="text-blue underline">Forgot Password</Link>
+            <Link to={URLS.FORGOTPASSWORD} className="text-blue underline">
+              Forgot Password
+            </Link>
 
             <BlueButton type="submit" title={isLogin ? "Log In" : "Register"} />
           </form>
