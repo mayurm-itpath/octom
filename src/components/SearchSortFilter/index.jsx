@@ -1,91 +1,45 @@
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { sortAndFilterTasks } from "../../redux/slices/tasks.slice";
 import SearchInput from "../../shared/Inputs/SearchInput";
-import useDebounce from "../../hooks/useDebounce";
 
-const SearchSortFilter = () => {
-  const [searchTasks, setSearchTasks] = useState("");
-  const [queryData, setQueryData] = useState({
-    filterArray: [],
-    filterQuery: "",
-    sortTask: "",
-  });
-
-  const dispatch = useDispatch();
-
-  useDebounce(searchTasks, 500); // Search using debounce custom hook
-
-  useEffect(() => {
-    dispatch(sortAndFilterTasks(queryData));
-  }, [queryData, dispatch]);
-
-  const handleChangeSearch = (e) => {
-    setSearchTasks(e.target.value);
-  };
-
-  const handleSort = async (e) => {
-    setQueryData({ ...queryData, sortTask: e.target.value });
-  };
-
-  const handleFilter = async (e) => {
-    const { checked, value } = e.target;
-    let tempArr;
-    if (checked) {
-      tempArr = [...queryData.filterArray, value];
-    } else {
-      tempArr = queryData.filterArray.filter((item) => item !== value);
-    }
-    const query = tempArr.map((item) => `status=${item}`).join("&");
-    setQueryData({ ...queryData, filterArray: tempArr, filterQuery: query });
-  };
-
+const SearchSortFilter = ({ filterState, handleFilterChange }) => {
   return (
     <>
-      <div>
+      <div className="flex flex-wrap items-center gap-5">
         <SearchInput
+          name="q"
           placeholder={"Search"}
           type={"text"}
-          value={searchTasks}
-          onChange={handleChangeSearch}
+          value={filterState?.q || ""}
+          onChange={handleFilterChange}
         />
-      </div>
-      <br />
 
-      <div>
         <select
-          onChange={handleSort}
+          name="_sort"
+          onChange={handleFilterChange}
+          value={filterState?._sort || ""}
           className="p-2 border border-black rounded"
         >
-          <option value="">Sort By</option>
+          <option hidden>Select</option>
+          <option value="">Select All</option>
           <option value="dueDate">Due Date</option>
         </select>
-        <br />
-        <br />
+      </div>
+      <br />
+      <br />
 
-        <div className="flex gap-5">
-          <label>Filter By Starus: </label>
-          <div>
-            <input
-              type="checkbox"
-              value={"completed"}
-              onChange={handleFilter}
-            />{" "}
-            <label>completed</label>
-          </div>
-          <div>
-            <input type="checkbox" value={"pending"} onChange={handleFilter} />{" "}
-            <label>pending</label>
-          </div>
-          <div>
-            <input
-              type="checkbox"
-              value={"in progress"}
-              onChange={handleFilter}
-            />{" "}
-            <label>in progress</label>
-          </div>
-        </div>
+      <div className="flex flex-wrap gap-5">
+        <label>Filter By Status: </label>
+        <select
+          name="status"
+          onChange={handleFilterChange}
+          value={filterState?.status || ""}
+          className="p-2 border border-black rounded"
+        >
+          <option hidden>Select</option>
+          <option value="">Select All</option>
+          <option value="pending">Pending</option>
+          <option value="in progress">Progress</option>
+          <option value="completed">Completed</option>
+        </select>
       </div>
     </>
   );

@@ -38,7 +38,7 @@ const TasksForm = ({
   const onSubmit = async (data) => {
     if (isUpdate) {
       try {
-        await dispatch(updateTask({ id: data.id, data }));
+        dispatch(updateTask({ id: data.id, data }));
         setUpdateInfo((prev) => ({ ...prev, isUpdate: false }));
       } catch (error) {
         window.alert("Error while update task");
@@ -53,14 +53,14 @@ const TasksForm = ({
           userEmail: userInfo.email,
           status: "pending",
         };
-        await dispatch(addTask(formData));
+        dispatch(addTask(formData));
       } catch (error) {
         window.alert("Error while add task");
         console.log(error);
       }
     }
     reset(initialFormData());
-    await dispatch(fetchTasks({}));
+    dispatch(fetchTasks({}));
     handleCloseModal();
     return;
   };

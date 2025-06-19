@@ -43,13 +43,6 @@ const AuthForm = ({ isLogin }) => {
   const onSubmit = async (data) => {
     if (isLogin) {
       try {
-        // const res = await api.USERS.getUserByEmail({ data });
-        // if (res[0].password === data.password) {
-        //   dispatch(login(res[0]));
-        //   navigate(URLS.INITIAL);
-        // } else {
-        //   window.alert("Invalid Login Info");
-        // }
         await dispatch(loginUser(data));
         navigate(URLS.INITIAL);
       } catch (error) {

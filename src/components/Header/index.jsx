@@ -26,7 +26,7 @@ const Header = () => {
               <h1 className="text-2xl font-bold">OCTOM</h1>
             </div>
 
-            <NavigationLinks />
+            {isLoggedin ? <NavigationLinks /> : <></>}
 
             <div className="flex items-center gap-3">
               {isLoggedin ? (

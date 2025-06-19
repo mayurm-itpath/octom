@@ -17,64 +17,10 @@ export const fetchTasks = createAsyncThunk(
         try {
             const userInfo = getState().users.userInfo;
             const res = await api.TASKS.getAll(data);
-            if (userInfo.role === 'user') {
-                return res.filter(task => task.userEmail === userInfo.email);
-            } else {
-                return res;
+            return {
+                user: userInfo,
+                tasks: res
             }
-        } catch (error) {
-            return rejectWithValue(error);
-        }
-    }
-);
-
-// Search tasks
-export const searchTasks = createAsyncThunk(
-    'tasks/searchTasks',
-    async (data, { rejectWithValue }) => {
-        try {
-            const res1 = await api.TASKS.searchByName({ data });
-            const res2 = await api.TASKS.searchByTitle({ data });
-            return [...res1, ...res2];
-        } catch (error) {
-            return rejectWithValue(error);
-        }
-    }
-);
-
-// Sort and filter tasks
-export const sortAndFilterTasks = createAsyncThunk(
-    'tasks/sortAndFilterTasks',
-    async (data, { rejectWithValue }) => {
-        try {
-            const res = await api.TASKS.sortAndFilter({ data });
-            return res;
-        } catch (error) {
-            return rejectWithValue(error);
-        }
-    }
-);
-
-// Delete task
-export const deleteTask = createAsyncThunk(
-    'tasks/deleteTask',
-    async (id, { rejectWithValue }) => {
-        try {
-            await api.TASKS.delete({ id });
-            return;
-        } catch (error) {
-            return rejectWithValue(error);
-        }
-    }
-);
-
-// Change status of task
-export const changeTaskStatus = createAsyncThunk(
-    'tasks/changeTaskStatus',
-    async ({ id, data }, { rejectWithValue }) => {
-        try {
-            await api.TASKS.update({ id, data });
-            return;
         } catch (error) {
             return rejectWithValue(error);
         }
@@ -106,6 +52,19 @@ export const updateTask = createAsyncThunk(
     }
 );
 
+// Delete task
+export const deleteTask = createAsyncThunk(
+    'tasks/deleteTask',
+    async (id, { rejectWithValue }) => {
+        try {
+            await api.TASKS.delete({ id });
+            return;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
+    }
+);
+
 const tasksSlice = createSlice({
     name: 'tasks',
     initialState,
@@ -117,82 +76,14 @@ const tasksSlice = createSlice({
             })
             .addCase(fetchTasks.fulfilled, (state, action) => {
                 state.tasks.isLoading = false;
-                state.tasks.data = action.payload;
+                const clone = [...action.payload.tasks]
+                if(action.payload.user?.role === 'user'){
+                    state.tasks.data = clone.filter(val => val.userEmail === action.payload.user?.email)
+                }else {
+                    state.tasks.data = clone
+                }
             })
             .addCase(fetchTasks.rejected, (state, action) => {
-                if (axios.isCancel(action.payload)) {
-                    return;
-                }
-                state.tasks.isLoading = false;
-            })
-            .addCase(searchTasks.pending, (state) => {
-                state.tasks.isLoading = true;
-            })
-            .addCase(searchTasks.fulfilled, (state, action) => {
-                state.tasks.isLoading = false;
-                state.tasks.data = _.uniqBy(action.payload, 'id');
-            })
-            .addCase(searchTasks.rejected, (state, action) => {
-                if (axios.isCancel(action.payload)) {
-                    return;
-                }
-                state.tasks.isLoading = false;
-            }).addCase(sortAndFilterTasks.pending, (state) => {
-                state.tasks.isLoading = true;
-            })
-            .addCase(sortAndFilterTasks.fulfilled, (state, action) => {
-                state.tasks.isLoading = false;
-                state.tasks.data = action.payload;
-            })
-            .addCase(sortAndFilterTasks.rejected, (state, action) => {
-                if (axios.isCancel(action.payload)) {
-                    return;
-                }
-                state.tasks.isLoading = false;
-            })
-            .addCase(deleteTask.pending, (state) => {
-                state.tasks.isLoading = true;
-            })
-            .addCase(deleteTask.fulfilled, (state) => {
-                state.tasks.isLoading = false;
-            })
-            .addCase(deleteTask.rejected, (state, action) => {
-                if (axios.isCancel(action.payload)) {
-                    return;
-                }
-                state.tasks.isLoading = false;
-            })
-            .addCase(changeTaskStatus.pending, (state) => {
-                state.tasks.isLoading = true;
-            })
-            .addCase(changeTaskStatus.fulfilled, (state) => {
-                state.tasks.isLoading = false;
-            })
-            .addCase(changeTaskStatus.rejected, (state, action) => {
-                if (axios.isCancel(action.payload)) {
-                    return;
-                }
-                state.tasks.isLoading = false;
-            })
-            .addCase(addTask.pending, (state) => {
-                state.tasks.isLoading = true;
-            })
-            .addCase(addTask.fulfilled, (state) => {
-                state.tasks.isLoading = false;
-            })
-            .addCase(addTask.rejected, (state, action) => {
-                if (axios.isCancel(action.payload)) {
-                    return;
-                }
-                state.tasks.isLoading = false;
-            })
-            .addCase(updateTask.pending, (state) => {
-                state.tasks.isLoading = true;
-            })
-            .addCase(updateTask.fulfilled, (state) => {
-                state.tasks.isLoading = false;
-            })
-            .addCase(updateTask.rejected, (state, action) => {
                 if (axios.isCancel(action.payload)) {
                     return;
                 }

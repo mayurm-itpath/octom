@@ -3,12 +3,10 @@ import { api } from "../../api/client";
 import SearchInput from "../../shared/Inputs/SearchInput";
 import BlueButton from "../../shared/Buttons/BlueButton";
 import UsersTable from "../../components/Tables/UsersTable";
-import { useSelector } from "react-redux";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [searchUsers, setSearchUsers] = useState("");
-  const userInfo = useSelector((state) => state.users.userInfo);
 
   useEffect(() => {
     try {
@@ -34,9 +32,6 @@ const Users = () => {
     <>
       <section>
         <div className="container mx-auto py-[50px]">
-          <h2 className="text-xl font-bold">Welcome {userInfo.name},</h2>
-          <div className="text-lg font-bold">Email Id: {userInfo.email}</div>
-          <br />
           <div>
             <SearchInput
               placeholder={"Search"}

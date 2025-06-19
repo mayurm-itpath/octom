@@ -13,19 +13,19 @@ const useRoute = () => {
             id: 'login',
             path: URLS.LOGIN,
             element: LoginPage,
-            isPublic: true
+            isAuth: true
         },
         {
             id: 'register',
             path: URLS.REGISTER,
             element: RegisterPage,
-            isPublic: true
+            isAuth: true
         },
         {
             id: 'forgotPassword',
             path: URLS.FORGOTPASSWORD,
             element: ForgotPasswodPage,
-            isPublic: true
+            isAuth: true
         },
         {
             id: 'root',
@@ -49,7 +49,7 @@ const useRoute = () => {
 
     const privateRoutes = useMemo(() => allRoutes.filter(route => route.isPrivate), [allRoutes]);
 
-    const publicRoutes = useMemo(() => allRoutes.filter(route => route.isPublic), [allRoutes]);
+    const publicRoutes = useMemo(() => allRoutes.filter(route => route.isAuth), [allRoutes]);
 
     return { privateRoutes, publicRoutes };
 };

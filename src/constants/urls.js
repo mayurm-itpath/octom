@@ -3,7 +3,6 @@ export const URLS = {
     LOGIN: '/login',
     REGISTER: '/register',
     FORGOTPASSWORD: '/forgot-password',
-    DASHBOARD: '/dashboard',
     TASKS: '/tasks',
     USERS: '/users'
 }

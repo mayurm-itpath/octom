@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { searchTasks } from '../redux/slices/tasks.slice';
+import { fetchTasks } from '../redux/slices/tasks.slice';
 
 const useDebounce = (value, delay) => {
     const [debouncedSearch, setDebouncedSearch] = useState(value);
@@ -15,7 +15,7 @@ const useDebounce = (value, delay) => {
     }, [value, delay]);
 
     useEffect(() => {
-        dispatch(searchTasks(debouncedSearch));
+        dispatch(fetchTasks(debouncedSearch));
     }, [debouncedSearch, dispatch]);
 
     return debouncedSearch;
