@@ -5,7 +5,7 @@ import NotFoundPage from "../pages/NotFoundPage";
 import AuthLayout from "../layout/AuthLayout";
 
 const Routing = () => {
-  const { privateRoutes, publicRoutes } = useRoute();
+  const { privateRoutes, authRoutes } = useRoute();
   
   return (
     <>
@@ -13,7 +13,7 @@ const Routing = () => {
         <Route path="*" element={<NotFoundPage />} />
 
         <Route element={<AuthLayout />}>
-          {publicRoutes.map(({ id, element: Element, ...other }) => (
+          {authRoutes.map(({ id, element: Element, ...other }) => (
             <Route key={id} element={<Element />} {...other} />
           ))}
         </Route>

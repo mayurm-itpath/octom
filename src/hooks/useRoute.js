@@ -49,9 +49,9 @@ const useRoute = () => {
 
     const privateRoutes = useMemo(() => allRoutes.filter(route => route.isPrivate), [allRoutes]);
 
-    const publicRoutes = useMemo(() => allRoutes.filter(route => route.isAuth), [allRoutes]);
+    const authRoutes = useMemo(() => allRoutes.filter(route => route.isAuth), [allRoutes]);
 
-    return { privateRoutes, publicRoutes };
+    return { privateRoutes, authRoutes };
 };
 
 export default useRoute;
