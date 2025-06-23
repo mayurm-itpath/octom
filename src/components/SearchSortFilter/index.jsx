@@ -1,28 +1,15 @@
 import SearchInput from "../../shared/Inputs/SearchInput";
 
-const SearchSortFilter = ({ filterState, handleFilterChange }) => {
+const SearchSortFilter = ({ filterState, handleFilterChange, searchTask, handleSearch }) => {
   return (
     <>
-      <div className="flex flex-wrap items-center gap-5">
-        <SearchInput
-          name="q"
-          placeholder={"Search"}
-          type={"text"}
-          value={filterState?.q || ""}
-          onChange={handleFilterChange}
-        />
-
-        <select
-          name="_sort"
-          onChange={handleFilterChange}
-          value={filterState?._sort || ""}
-          className="p-2 border border-black rounded"
-        >
-          <option hidden>Select</option>
-          <option value="">Select All</option>
-          <option value="dueDate">Due Date</option>
-        </select>
-      </div>
+      <SearchInput
+        name="q"
+        placeholder={"Search"}
+        type={"text"}
+        value={searchTask}
+        onChange={handleSearch}
+      />
       <br />
       <br />
 

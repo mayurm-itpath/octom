@@ -2,20 +2,34 @@ import BlueButton from "../../../shared/Buttons/BlueButton";
 import { useDispatch } from "react-redux";
 import {
   deleteTask,
-  fetchTasks,
   updateTask,
 } from "../../../redux/slices/tasks.slice";
 import CustomTable from "../CustomTable";
+import { FaSort } from "react-icons/fa";
 
-const TasksTable = ({ tasks, userInfo, handleUpdate }) => {
+const SortTableHead = ({ handleSort, label, value }) => {
+  return (
+    <>
+      <span
+        onClick={() => handleSort(value)}
+        className="flex items-center gap-3 cursor-pointer"
+      >
+        {label} <FaSort />
+      </span>
+    </>
+  );
+};
+
+const TasksTable = ({ fetchTableData, tasks, userInfo, handleUpdate, handleSort }) => {
   const dispatch = useDispatch();
+
   const handleDelete = async (id) => {
     const confirm = window.confirm(
       "Are you sure, Do you want to delete this task?"
     );
     if (confirm) {
       await dispatch(deleteTask(id));
-      await dispatch(fetchTasks({}));
+      fetchTableData();
     } else {
       return;
     }
@@ -25,13 +39,19 @@ const TasksTable = ({ tasks, userInfo, handleUpdate }) => {
     await dispatch(
       updateTask({ id: item.id, data: { ...item, status: value } })
     );
-    await dispatch(fetchTasks({}));
+    fetchTableData();
   };
 
   const adminColumns = [
     {
       id: "title",
-      label: "Title",
+      label: (
+        <SortTableHead
+          handleSort={handleSort}
+          label={"Title"}
+          value={"title"}
+        />
+      ),
       fieldName: "title",
     },
     {
@@ -46,12 +66,24 @@ const TasksTable = ({ tasks, userInfo, handleUpdate }) => {
     },
     {
       id: "dueDate",
-      label: "Due Date",
+      label: (
+        <SortTableHead
+          handleSort={handleSort}
+          label={"Due Date"}
+          value={"dueDate"}
+        />
+      ),
       fieldName: "dueDate",
     },
     {
       id: "userName",
-      label: "Name",
+      label: (
+        <SortTableHead
+          handleSort={handleSort}
+          label={"Name"}
+          value={"userName"}
+        />
+      ),
       fieldName: "userName",
     },
     {

@@ -7,7 +7,7 @@ import { taskValidation } from "../../../utils/validations";
 import { v4 as uuid } from "uuid";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addTask, fetchTasks, updateTask } from "../../../redux/slices/tasks.slice";
+import { addTask, updateTask } from "../../../redux/slices/tasks.slice";
 
 const TasksForm = ({
   isUpdate,
@@ -15,6 +15,7 @@ const TasksForm = ({
   setUpdateInfo,
   openModal,
   handleCloseModal,
+  fetchTableData
 }) => {
   const userInfo = useSelector((state) => state.users.userInfo);
   const dispatch = useDispatch();
@@ -38,7 +39,7 @@ const TasksForm = ({
   const onSubmit = async (data) => {
     if (isUpdate) {
       try {
-        dispatch(updateTask({ id: data.id, data }));
+        await dispatch(updateTask({ id: data.id, data }));
         setUpdateInfo((prev) => ({ ...prev, isUpdate: false }));
       } catch (error) {
         window.alert("Error while update task");
@@ -53,14 +54,14 @@ const TasksForm = ({
           userEmail: userInfo.email,
           status: "pending",
         };
-        dispatch(addTask(formData));
+        await dispatch(addTask(formData));
       } catch (error) {
         window.alert("Error while add task");
         console.log(error);
       }
     }
     reset(initialFormData());
-    dispatch(fetchTasks({}));
+    fetchTableData();
     handleCloseModal();
     return;
   };

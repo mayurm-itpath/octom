@@ -6,6 +6,7 @@ import TasksForm from "../../components/Forms/TasksForm";
 import useModal from "../../hooks/useModal";
 import TasksTable from "../../components/Tables/TasksTable";
 import SearchSortFilter from "../../components/SearchSortFilter";
+import useDebounce from "../../hooks/useDebounce";
 
 const initialState = {
   _page: 1,
@@ -23,6 +24,9 @@ const Tasks = () => {
     isUpdate: false,
   });
 
+  const [searchTask, setSearchTask] = useState(''); // Search task state
+  const debounceSearch = useDebounce(searchTask, 500); // Deboounce search task state
+
   const finalFilterState = useMemo(() => {
     const clone = { ...filterState };
     const finalFilterArray = Object.entries(clone).filter(
@@ -31,19 +35,40 @@ const Tasks = () => {
     return Object.fromEntries(finalFilterArray);
   }, [filterState]);
 
+  const fetchTableData = () => {
+    if (userInfo.role === "user") {
+      dispatch(
+        fetchTasks({
+          params: {
+            ...finalFilterState,
+            userEmail: userInfo.email,
+          },
+        })
+      );
+    } else {
+      dispatch(
+        fetchTasks({
+          params: {
+            ...finalFilterState,
+            q: debounceSearch
+          },
+        })
+      );
+    }
+  }
+
   useEffect(() => {
-    dispatch(
-      fetchTasks({
-        params: {
-          ...finalFilterState,
-        },
-      })
-    );
-  }, [dispatch, finalFilterState]);
+    fetchTableData();
+  }, [dispatch, finalFilterState, userInfo, debounceSearch]);
 
   const handleUpdate = (item) => {
     setUpdateInfo({ updateData: item, isUpdate: true });
     handleOpen();
+  };
+
+  // Search task
+  const handleSearch = (e) =>  {
+    setSearchTask(e.target.value);
   };
 
   // Filter or sort tasks
@@ -54,6 +79,15 @@ const Tasks = () => {
       [name]: value,
     }));
   }, []);
+
+  // Sort table
+  const handleSort = useCallback((value) => {
+    if (filterState?._sort === value) {
+      setFilterState((prev) => ({ ...prev, _sort: "" }));
+    } else {
+      setFilterState((prev) => ({ ...prev, _sort: value }));
+    }
+  }, [filterState]);
 
   // pagination previous page
   const handlePrevious = () => {
@@ -77,6 +111,8 @@ const Tasks = () => {
             <SearchSortFilter
               handleFilterChange={handleFilterChange}
               filterState={filterState}
+              searchTask={searchTask}
+              handleSearch={handleSearch}
             />
           ) : (
             <>
@@ -92,7 +128,13 @@ const Tasks = () => {
             </>
           )}
 
-          <TasksTable tasks={tasks} userInfo={userInfo} handleUpdate={handleUpdate} />
+          <TasksTable
+            tasks={tasks}
+            userInfo={userInfo}
+            handleUpdate={handleUpdate}
+            handleSort={handleSort}
+            fetchTableData={fetchTableData}
+          />
 
           {/* pagination */}
           <div className="flex items-center gap-5">
@@ -108,6 +150,7 @@ const Tasks = () => {
             updateData={updateInfo.updateData}
             openModal={open}
             handleCloseModal={handleClose}
+            fetchTableData={fetchTableData}
           />
         </div>
       </section>
