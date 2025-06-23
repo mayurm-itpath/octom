@@ -35,7 +35,7 @@ const Tasks = () => {
     return Object.fromEntries(finalFilterArray);
   }, [filterState]);
 
-  const fetchTableData = () => {
+  const fetchTableData = useCallback(() => {
     if (userInfo.role === "user") {
       dispatch(
         fetchTasks({
@@ -55,11 +55,11 @@ const Tasks = () => {
         })
       );
     }
-  }
+  }, [dispatch, finalFilterState, userInfo, debounceSearch]);
 
   useEffect(() => {
     fetchTableData();
-  }, [dispatch, finalFilterState, userInfo, debounceSearch]);
+  }, [fetchTableData]);
 
   const handleUpdate = (item) => {
     setUpdateInfo({ updateData: item, isUpdate: true });
